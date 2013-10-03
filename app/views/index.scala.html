@@ -1,10 +1,11 @@
 @(message: String)
+@import widgets._
 
 @main("CloudWei") {
     
 	<div class="main-content2 col-sm-8">
 		
-		
+		@stream()
 
 	</div><!--/.main-content-->
 	
@@ -28,6 +29,12 @@
 			</button>
 		</div>
 		
+		@notice()	
+		
+		
+		@community_recommend()
+
+		@book()	
 		
 	</div>
     

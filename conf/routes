@@ -5,6 +5,14 @@
 # Home page
 GET     /                           controllers.Application.index
 
+GET		/home						controllers.Home.index
+
+GET		/community					controllers.Communities.index
+
+GET		/blog						controllers.Blog.index
+
+GET		/ask						controllers.Ask.index
+
 # Login page
 GET     /login                      securesocial.controllers.LoginPage.login
 GET     /logout                     securesocial.controllers.LoginPage.logout
