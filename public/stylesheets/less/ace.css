@@ -6,9 +6,9 @@ body {
   padding-bottom: 0;
   background-color: #e4e6e9;
   min-height: 100%;
-  font-family: 'Open Sans';
-  font-size: 13px;
-  color: #393939;
+  font-family: 'Helvetica,Arial,sans-serif';
+  font-size: 12px;
+  color: #494949;
 }
 body:before {
   content: "";
@@ -10938,7 +10938,7 @@ img.editable-click:hover {
   font-family: FontAwesome;
   font-size: 14px;
   content: "\f060";
-  color: #393939;
+  color: #494949;
 }
 .ui-datepicker .ui-datepicker-prev-hover,
 .ui-datepicker .ui-datepicker-next-hover {
@@ -10963,8 +10963,8 @@ img.editable-click:hover {
   min-width: 24px;
   max-width: 24px;
   text-align: center;
-  color: #393939;
-  font-size: 13px;
+  color: #494949;
+  font-size: 12px;
 }
 .ui-datepicker td > a:hover {
   background-color: #EEE;
@@ -11293,7 +11293,7 @@ img.editable-click:hover {
 .ui-jqgrid .ui-paging-info,
 .ui-jqgrid .ui-pg-table,
 .ui-jqgrid .ui-pg-selbox {
-  font-size: 13px;
+  font-size: 12px;
 }
 .ui-jqgrid .ui-jqgrid-title {
   float: left;
@@ -11469,7 +11469,7 @@ img.editable-click:hover {
 }
 .ui-jqgrid-sortable {
   padding-left: 4px;
-  font-size: 13px;
+  font-size: 12px;
   color: #777;
   font-weight: bold;
 }
@@ -11615,18 +11615,18 @@ th[aria-selected=true] .ui-jqgrid-sortable {
 }
 .ui-jqdialog-content,
 .ui-jqdialog .ui-jqdialog-content {
-  font-size: 13px;
+  font-size: 12px;
   padding: 4px 0 0;
 }
 .ui-jqdialog-content .formdata,
 .ui-jqdialog .ui-jqdialog-content .formdata {
-  font-size: 13px;
+  font-size: 12px;
   padding: 6px 12px;
 }
 .ui-jqdialog-content .form-view-data,
 .ui-jqdialog .ui-jqdialog-content .form-view-data {
   vertical-align: middle;
-  font-size: 13px;
+  font-size: 12px;
 }
 .ui-jqdialog-content[id*="alertcnt_"],
 .ui-jqdialog .ui-jqdialog-content[id*="alertcnt_"] {
@@ -11784,7 +11784,7 @@ th[aria-selected=true] .ui-jqgrid-sortable {
   margin: 4px 4px 8px;
   padding: 6px 10px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  font-size: 13px;
+  font-size: 12px;
 }
 .ui-jqdialog .ui-widget-header {
   background-color: #f8f8f8;
@@ -11828,7 +11828,7 @@ th[aria-selected=true] .ui-jqgrid-sortable {
   color: #FFFFFF ;
   cursor: pointer;
   display: inline-block;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 28px;
   padding: 0 12px 1px;
   margin: 0 8px;

@@ -73,4 +73,7 @@ class InMemoryUserService(application: Application) extends UserServicePlugin(ap
   def deleteExpiredTokens() {
     tokens = tokens.filter(!_._2.isExpired)
   }
+  
+  override def onStop(){
+  }
 }
