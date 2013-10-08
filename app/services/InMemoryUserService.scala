@@ -20,6 +20,7 @@ import play.api.{Logger, Application}
 import securesocial.core._
 import securesocial.core.providers.Token
 import securesocial.core.IdentityId
+import models._
 
 
 /**
@@ -34,24 +35,25 @@ class InMemoryUserService(application: Application) extends UserServicePlugin(ap
 
   def find(id: IdentityId): Option[Identity] = {
     if ( Logger.isDebugEnabled ) {
-      Logger.debug("users = %s".format(users))
+      Logger.debug("users (id)= %s".format(users))
     }
-    users.get(id.userId + id.providerId)
+    User.findById(id)
   }
 
   def findByEmailAndProvider(email: String, providerId: String): Option[Identity] = {
     if ( Logger.isDebugEnabled ) {
-      Logger.debug("users = %s".format(users))
+      Logger.debug("users (email)= %s".format(users))
     }
-    users.values.find( u => u.email.map( e => e == email && u.identityId.providerId == providerId).getOrElse(false))
+	User.findOneByEmailAndProvider(email, providerId)
   }
 
   def save(user: Identity): Identity = {
-    users = users + (user.identityId.userId + user.identityId.providerId -> user)
+	  val u = User(user)
+	  User.save(u)
     // this sample returns the same user object, but you could return an instance of your own class
     // here as long as it implements the Identity trait. This will allow you to use your own class in the protected
     // actions and event callbacks. The same goes for the find(id: UserId) method.
-    user
+	u
   }
 
   def save(token: Token) {

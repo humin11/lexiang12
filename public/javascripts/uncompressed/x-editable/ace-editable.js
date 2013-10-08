@@ -324,7 +324,7 @@ Slider editable input.
 							self.$input.val(val);
 							
 							if(ui.handle.firstChild == null) {/* no tooltips attached to it */
-								$(ui.handle).append("<div class='tooltip top in' style='display:none;top:-42px;left:-4px;'><div class='tooltip-arrow'></div><div class='tooltip-inner'></div></div>");
+								$(ui.handle).append("<div class='tooltip top in' style='display:none;top:-38px;left:-5px;'><div class='tooltip-arrow'></div><div class='tooltip-inner'></div></div>");
 							}
 							$(ui.handle.firstChild).show().children().eq(1).text(val);
 						}

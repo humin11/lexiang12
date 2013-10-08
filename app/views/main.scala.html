@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String)(content: Html)(implicit request: RequestHeader)
 
 @import widgets._
 
@@ -23,7 +23,10 @@
 		<![endif]-->
 
 		<!--page specific plugin styles-->
-
+		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/jquery-ui-1.10.3.custom.min.css")" />
+		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/jquery.gritter.css")" />
+		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/select2.css")" />
+		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap-editable.css")" />
 		<!--fonts-->
 
 		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/ace-fonts.css")" />
@@ -31,7 +34,6 @@
 		<!--ace styles-->
 
 		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/ace.min.css")" />
-		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/ace-rtl.min.css")" />
 		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/ace-skins.min.css")" />
 
 		<!--[if lte IE 8]>
@@ -52,11 +54,50 @@
 		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
 		
 		<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+		
+
+		<!--[if !IE]> -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<!-- <![endif]-->
+		<!--[if IE]>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<![endif]-->
+	
+		<!--[if !IE]>-->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='@routes.Assets.at("javascripts/jquery-2.0.3.min.js")'>"+"<"+"/script>");
+		</script>
+		<!--<![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='@routes.Assets.at("javascripts/jquery-1.10.2.min.js")'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='@routes.Assets.at("javascripts/jquery.mobile.custom.min.js")'>"+"<"+"/script>");
+		</script>
+		<script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+		
+		<!--page specific plugin scripts-->
+
+		<!--[if lte IE 8]>
+		  <script src="@routes.Assets.at("javascripts/excanvas.min.js")"></script>
+		<![endif]-->
+
+		<script src="@routes.Assets.at("javascripts/jquery-ui-1.10.3.custom.min.js")"></script>
+		<script src="@routes.Assets.at("javascripts/jquery.ui.touch-punch.min.js")"></script>
+		<script src="@routes.Assets.at("javascripts/jquery.slimscroll.min.js")"></script>
+		<script src="@routes.Assets.at("javascripts/jquery.gritter.min.js")"></script>
+		<script src="@routes.Assets.at("javascripts/bootbox.min.js")"></script>
+
+		
 	</head>
 
 	<body style>
 		
-		@navbar()
+		@navbar(request)
 
 		<div class="space-6"></div>
 		<div class="main-container container">
@@ -106,46 +147,12 @@
 		</a>
 
 		<!--basic scripts-->
-
-		<!--[if !IE]>-->
-
-		<script type="text/javascript">
-			window.jQuery || document.write("<script src='@routes.Assets.at("javascripts/jquery-2.0.3.min.js")'>"+"<"+"/script>");
-		</script>
-
-		<!--<![endif]-->
-
-		<!--[if IE]>
-		<script type="text/javascript">
-		 window.jQuery || document.write("<script src='@routes.Assets.at("javascripts/jquery-1.10.2.min.js")'>"+"<"+"/script>");
-		</script>
-		<![endif]-->
-
-		<script type="text/javascript">
-			if("ontouchend" in document) document.write("<script src='@routes.Assets.at("javascripts/jquery.mobile.custom.min.js")'>"+"<"+"/script>");
-		</script>
-		<script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
-
-		<!--page specific plugin scripts-->
-
-		<!--[if lte IE 8]>
-		  <script src="@routes.Assets.at("javascripts/excanvas.min.js")"></script>
-		<![endif]-->
-
-		<script src="@routes.Assets.at("javascripts/jquery-ui-1.10.3.custom.min.js")"></script>
-		<script src="@routes.Assets.at("javascripts/jquery.ui.touch-punch.min.js")"></script>
-		<script src="@routes.Assets.at("javascripts/jquery.slimscroll.min.js")"></script>
-		<script src="@routes.Assets.at("javascripts/jquery.easy-pie-chart.min.js")"></script>
-		<script src="@routes.Assets.at("javascripts/jquery.sparkline.min.js")"></script>
-		<script src="@routes.Assets.at("javascripts/flot/jquery.flot.min.js")"></script>
-		<script src="@routes.Assets.at("javascripts/flot/jquery.flot.pie.min.js")"></script>
-		<script src="@routes.Assets.at("javascripts/flot/jquery.flot.resize.min.js")"></script>
-
+		
+		
 		<!--ace scripts-->
 
 		<script src="@routes.Assets.at("javascripts/ace-elements.min.js")"></script>
 		<script src="@routes.Assets.at("javascripts/ace.min.js")"></script>
-
 		<!--inline scripts related to this page-->
 
 		<script type="text/javascript">

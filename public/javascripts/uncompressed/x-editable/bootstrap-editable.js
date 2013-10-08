@@ -4501,14 +4501,14 @@ Editableform based on Twitter Bootstrap
     $.extend($.fn.editableContainer.Popup.prototype, {
         containerName: 'popover',
         //for compatibility with bootstrap <= 2.2.1 (content inserted into <p> instead of directly .popover-content) 
-        innerCss: $.fn.popover && $($.fn.popover.defaults.template).find('p').length ? '.popover-content p' : '.popover-content',
+        innerCss: $.fn.popover && $($.fn.popover.Constructor.DEFAULTS.template).find('p').length ? '.popover-content p' : '.popover-content',
 
         initContainer: function(){
             $.extend(this.containerOptions, {
                 trigger: 'manual',
                 selector: false,
                 content: ' ',
-                template: $.fn.popover.defaults.template
+                template: $.fn.popover.Constructor.DEFAULTS.template
             });
             
             //as template property is used in inputs, hide it from popover
@@ -6216,7 +6216,7 @@ Automatically shown in inline mode.
         /**
         @property tpl 
         **/         
-        tpl:'<div class="input-append date"><input type="text"/><span class="add-on"><i class="icon-th"></i></span></div>',
+        tpl:'<div class="input-group input-append date"><input type="text"/><span class="add-on input-group-addon"><i class="icon-th"></i></span></div>',
         /**
         @property inputclass 
         @default 'input-small'
@@ -6539,7 +6539,7 @@ Automatically shown in inline mode.
         /**
         @property tpl 
         **/         
-        tpl:'<div class="input-append date"><input type="text"/><span class="add-on"><i class="icon-th"></i></span></div>',
+        tpl:'<div class="input-group input-append date"><input type="text"/><span class="input-group-addon add-on"><i class="icon-th"></i></span></div>',
         /**
         @property inputclass 
         @default 'input-medium'

@@ -3,6 +3,9 @@ securesocial.appName=乐享一二
 lexiang.core=传道! 授业! 解惑!
 lexiang.core.description=人非生而知之者，孰能无惑？惑而不从师，其为惑也，终不解矣。生乎吾前，其闻道也固先乎吾，吾从而师之，生乎吾后，其闻道也亦告乎吾，吾从而师之。吾师道也，夫庸知其年之后生于吾乎？是故，无贵无贱，无长无少，道之所存，师之所存也。
 
+settings=设置
+profiles=属性
+
 # Login page
 securesocial.login.title=欢迎来到乐享社区
 securesocial.login.button=登录
@@ -16,6 +19,10 @@ securesocial.login.here=这里
 securesocial.login.invalidCredentials=你输入的是无效的登录凭据
 securesocial.login.forgotPassword=忘掉密码了？
 securesocial.login.register=我想加入
+securesocial.login.return=返回登录
+
+# Logout page
+securesocial.logout=退出
 
 # Sign up page
 securesocial.signup.title=欢迎加入乐享社区
@@ -34,6 +41,7 @@ securesocial.signup.thankYouCheckEmail=谢谢！请到邮箱中查看下一步�
 securesocial.signup.invalidLink=你访问的链接无效
 securesocial.signup.signUpDone=注册成功，欢迎登录
 securesocial.signup.invalidPassword=至少输入 {0} 个字符
+securesocial.signup.button=注册
 
 # Password reset
 securesocial.password.title=重置密码

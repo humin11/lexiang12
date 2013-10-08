@@ -5,6 +5,8 @@
 # Home page
 GET     /                           controllers.Applications.index
 
+GET		/userAjax					controllers.Applications.userAjax
+
 GET		/home						controllers.Home.index
 
 GET		/community					controllers.Communities.index
@@ -12,6 +14,8 @@ GET		/community					controllers.Communities.index
 GET		/blog						controllers.Blog.index
 
 GET		/ask						controllers.Ask.index
+
+GET		/profile					controllers.Users.profile
 
 # Login page
 GET     /login                      securesocial.controllers.LoginPage.login

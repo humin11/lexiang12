@@ -53,6 +53,14 @@
 						$entity = self.$element.find('.tree-item:eq(0)').clone().show();
 						$entity.find('.tree-item-name').html(value.name);
 						$entity.data(value);
+
+						if('additionalParameters' in value
+							&& 'item-selected' in value.additionalParameters 
+								&& value.additionalParameters['item-selected'] == true) {
+								$entity.addClass ('tree-selected');
+								$entity.find('i').removeClass(self.options['unselected-icon']).addClass(self.options['selected-icon']);
+								//$entity.closest('.tree-folder-content').show();
+						}
 					}
 
 					if($el.hasClass('tree-folder-header')) {

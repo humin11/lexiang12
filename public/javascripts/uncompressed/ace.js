@@ -13,6 +13,7 @@ jQuery(function($) {
 	ace.general_things(jQuery);//and settings
 
 	ace.widget_boxes(jQuery);
+	ace.widget_reload_handler(jQuery);//this is for demo only, you can remove and have your own function, please see examples/widget.html
 
 	/**
 	//make sidebar scrollbar when it is fixed and some parts of it is out of view
@@ -120,16 +121,19 @@ ace.general_things = function($) {
  
  $('#ace-settings-navbar').on('click', function(){
 	ace.settings.navbar_fixed(this.checked);//@ ace-extra.js
- }).get(0).checked = ace.settings.is('navbar', 'fixed')
+ }).each(function(){this.checked = ace.settings.is('navbar', 'fixed')})
 
  $('#ace-settings-sidebar').on('click', function(){
 	ace.settings.sidebar_fixed(this.checked);//@ ace-extra.js
- }).get(0).checked = ace.settings.is('sidebar', 'fixed')
- 
+ }).each(function(){this.checked = ace.settings.is('sidebar', 'fixed')})
+
  $('#ace-settings-breadcrumbs').on('click', function(){
 	ace.settings.breadcrumbs_fixed(this.checked);//@ ace-extra.js
- }).get(0).checked = ace.settings.is('breadcrumbs', 'fixed')
+ }).each(function(){this.checked = ace.settings.is('breadcrumbs', 'fixed')})
 
+ $('#ace-settings-add-container').on('click', function(){
+	ace.settings.main_container_fixed(this.checked);//@ ace-extra.js
+ }).each(function(){this.checked = ace.settings.is('main-container', 'fixed')})
 
  //Switching to RTL (right to left) Mode
  $('#ace-settings-rtl').removeAttr('checked').on('click', function(){
@@ -138,7 +142,7 @@ ace.general_things = function($) {
 
 
  $('#btn-scroll-up').on(ace.click_event, function(){
-	var duration = Math.max(100, parseInt($('html').scrollTop() / 3));
+	var duration = Math.min(400, Math.max(100, parseInt($('html').scrollTop() / 3)));
 	$('html,body').animate({scrollTop: 0}, duration);
 	return false;
  });
@@ -184,7 +188,34 @@ ace.general_things = function($) {
 
 
 ace.widget_boxes = function($) {
-	$('.page-content,#page-content').delegate('.widget-toolbar > [data-action]' , 'click', function(ev) {
+	$(document).on('hide.bs.collapse show.bs.collapse', function (ev) {
+		var hidden_id = ev.target.getAttribute('id')
+		$('[href*="#'+ hidden_id+'"]').find('[class*="icon-"]').each(function(){
+			var $icon = $(this)
+
+			var $match
+			var $icon_down = null
+			var $icon_up = null
+			if( ($icon_down = $icon.attr('data-icon-show')) ) {
+				$icon_up = $icon.attr('data-icon-hide')
+			}
+			else if( $match = $icon.attr('class').match(/icon\-(.*)\-(up|down)/) ) {
+				$icon_down = 'icon-'+$match[1]+'-down'
+				$icon_up = 'icon-'+$match[1]+'-up'
+			}
+
+			if($icon_down) {
+				if(ev.type == 'show') $icon.removeClass($icon_down).addClass($icon_up)
+					else $icon.removeClass($icon_up).addClass($icon_down)
+					
+				return false;//ignore other icons that match, one is enough
+			}
+
+		});
+	})
+
+
+	$(document).on('click.ace.widget', '[data-action]', function (ev) {
 		ev.preventDefault();
 
 		var $this = $(this);
@@ -194,6 +225,14 @@ ace.widget_boxes = function($) {
 		if($box.hasClass('ui-sortable-helper')) return;
 
 		if($action == 'collapse') {
+			var event_name = $box.hasClass('collapsed') ? 'show' : 'hide';
+			var event_complete_name = event_name == 'show' ? 'shown' : 'hidden';
+
+			
+			var event
+			$box.trigger(event = $.Event(event_name+'.ace.widget'))
+			if (event.isDefaultPrevented()) return
+		
 			var $body = $box.find('.widget-body');
 			var $icon = $this.find('[class*=icon-]').eq(0);
 			var $match = $icon.attr('class').match(/icon\-(.*)\-(up|down)/);
@@ -209,50 +248,90 @@ ace.widget_boxes = function($) {
 			var expandSpeed   = 300;
 			var collapseSpeed = 200;
 
-			if($box.hasClass('collapsed')) {
+			if( event_name == 'show' ) {
 				if($icon) $icon.addClass($icon_up).removeClass($icon_down);
 				$box.removeClass('collapsed');
-				$body.slideUp(0 , function(){$body.slideDown(expandSpeed)});
+				$body.slideUp(0 , function(){$body.slideDown(expandSpeed, function(){$box.trigger(event = $.Event(event_complete_name+'.ace.widget'))})});
 			}
 			else {
 				if($icon) $icon.addClass($icon_down).removeClass($icon_up);
-				$body.slideUp(collapseSpeed, function(){$box.addClass('collapsed')});
+				$body.slideUp(collapseSpeed, function(){$box.addClass('collapsed');$box.trigger(event = $.Event(event_complete_name+'.ace.widget'))});
 			}
+
+			
 		}
 		else if($action == 'close') {
+			var event
+			$box.trigger(event = $.Event('close.ace.widget'))
+			if (event.isDefaultPrevented()) return
+			
 			var closeSpeed = parseInt($this.data('close-speed')) || 300;
-			$box.hide(closeSpeed , function(){$box.remove()});
+			$box.hide(closeSpeed , function(){$box.trigger(event = $.Event('closed.ace.widget'));$box.remove();});
 		}
 		else if($action == 'reload') {
+			var event
+			$box.trigger(event = $.Event('reload.ace.widget'))
+			if (event.isDefaultPrevented()) return
+
 			$this.blur();
 
 			var $remove = false;
 			if($box.css('position') == 'static') {$remove = true; $box.addClass('position-relative');}
-			$box.append('<div class="widget-box-layer"><i class="icon-spinner icon-spin icon-2x white"></i></div>');
-			setTimeout(function(){
-				$box.find('.widget-box-layer').remove();
+			$box.append('<div class="widget-box-overlay"><i class="icon-spinner icon-spin icon-2x white"></i></div>');
+			
+			$box.one('reloaded.ace.widget', function() {
+				$box.find('.widget-box-overlay').remove();
 				if($remove) $box.removeClass('position-relative');
-			}, parseInt(Math.random() * 1000 + 1000));
+			});
+
 		}
 		else if($action == 'settings') {
-
+			var event = $.Event('settings.ace.widget')
+			$box.trigger(event)
 		}
 
 	});
 }
 
 
+ace.widget_reload_handler = function($) {
+	//***default action for reload in this demo
+	//you should remove this and add your own handler for each specific .widget-box
+	//when data is finished loading or processing is done you can call $box.trigger('reloaded.ace.widget')
+	$(document).on('reload.ace.widget', '.widget-box', function (ev) {
+		var $box = $(this);
+		//trigger the reloaded event after 1-2 seconds
+		setTimeout(function() {
+			$box.trigger('reloaded.ace.widget');
+		}, parseInt(Math.random() * 1000 + 1000));
+	});
+	
+	
+	//you may want to do something like this:
+	/**
+	$('#my-widget-box').on('reload.ace.widget', function(){
+		//load new data 
+		//when finished trigger "reloaded"
+		$(this).trigger('reloaded.ace.widget');
+	});	
+	*/
+}
+
+
 
 //search box's dropdown autocomplete
 ace.enable_search_ahead = function($) {
-	ace.variable_US_STATES = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Dakota","North Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"],
-	$('#nav-search-input').typeahead({
-		source: ace.variable_US_STATES,
-		updater:function (item) {
-			$('#nav-search-input').focus();
-			return item;
-		}
-	});
+	ace.variable_US_STATES = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Dakota","North Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]
+	
+	try {
+		$('#nav-search-input').typeahead({
+			source: ace.variable_US_STATES,
+			updater:function (item) {
+				$('#nav-search-input').focus();
+				return item;
+			}
+		});
+	} catch(e) {}
 }
 
 
@@ -265,7 +344,7 @@ ace.switch_direction = function($) {
 	.find('.dropdown-menu:not(.datepicker-dropdown,.colorpicker)').toggleClass('pull-right')
 	.end()
 	//swap pull-left & pull-right
-	.find('.pull-right:not(.dropdown-menu,blockquote,.dropdown-submenu,.profile-skills .pull-right,.control-group .controls > [class*="span"]:first-child)').removeClass('pull-right').addClass('tmp-rtl-pull-right')
+	.find('.pull-right:not(.dropdown-menu,blockquote,.profile-skills .pull-right)').removeClass('pull-right').addClass('tmp-rtl-pull-right')
 	.end()
 	.find('.pull-left:not(.dropdown-submenu,.profile-skills .pull-left)').removeClass('pull-left').addClass('pull-right')
 	.end()
@@ -275,9 +354,6 @@ ace.switch_direction = function($) {
 	.find('.chosen-container').toggleClass('chosen-rtl')
 	.end()
 
-	.find('.control-group .controls > [class*="span"]:first-child').toggleClass('pull-right')
-	.end()
-	
 	function swap_classes(class1, class2) {
 		$body
 		 .find('.'+class1).removeClass(class1).addClass('tmp-rtl-'+class1)
@@ -296,6 +372,7 @@ ace.switch_direction = function($) {
 	}
 
 	swap_classes('align-left', 'align-right');
+	swap_classes('no-padding-left', 'no-padding-right');
 	swap_classes('arrowed', 'arrowed-right');
 	swap_classes('arrowed-in', 'arrowed-in-right');
 	swap_classes('messagebar-item-left', 'messagebar-item-right');//for inbox page

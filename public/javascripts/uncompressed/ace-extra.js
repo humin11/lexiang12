@@ -89,6 +89,32 @@ ace.settings = {
 		document.getElementById('ace-settings-sidebar').checked = fix;
 	},
 
+	main_container_fixed : function(inside) {
+		inside = inside || false;
+
+		var main_container = document.getElementById('main-container');
+		var navbar_container = document.getElementById('navbar-container');
+		if(inside) {
+			if( !ace.hasClass(main_container , 'container') )  ace.addClass(main_container , 'container');
+			if( !ace.hasClass(navbar_container , 'container') )  ace.addClass(navbar_container , 'container');
+			ace.settings.set('main-container', 'fixed');
+		} else {
+			ace.removeClass(main_container , 'container');
+			ace.removeClass(navbar_container , 'container');
+			ace.settings.unset('main-container', 'fixed');
+		}
+		document.getElementById('ace-settings-add-container').checked = inside;
+		
+		
+		if(navigator.userAgent.match(/webkit/i)) {
+			//webkit has a problem redrawing and moving around the sidebar background in realtime
+			//so we do this, to force redraw
+			//there will be no problems with webkit if the ".container" class is statically put inside HTML code.
+			var sidebar = document.getElementById('sidebar')
+			ace.toggleClass(sidebar , 'menu-min')
+			setTimeout(function() {	ace.toggleClass(sidebar , 'menu-min') } , 0)
+		}
+	},
 
 	sidebar_collapsed : function(collpase) {
 		collpase = collpase || false;
@@ -129,7 +155,8 @@ ace.settings.check = function(item, val) {
 		'navbar-fixed' : 'navbar-fixed-top',
 		'sidebar-fixed' : 'sidebar-fixed',
 		'breadcrumbs-fixed' : 'breadcrumbs-fixed',
-		'sidebar-collapsed' : 'menu-min'
+		'sidebar-collapsed' : 'menu-min',
+		'main-container-fixed' : 'container'
 	}
 
 
@@ -140,7 +167,7 @@ ace.settings.check = function(item, val) {
 	
 	var target = document.getElementById(item);//#navbar, #sidebar, #breadcrumbs
 	if(status != ace.hasClass(target , mustHaveClass[item+'-'+val])) {
-		ace.settings[item+'_'+val](status);//call the relevant function to mage the changes
+		ace.settings[item.replace('-','_')+'_'+val](status);//call the relevant function to mage the changes
 	}
 }
 
